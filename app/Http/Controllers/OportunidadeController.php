@@ -71,15 +71,21 @@ class OportunidadeController extends Controller
         }
     }
     #ID user e ID categoria, qnd user se inscreve esse metodo é chamado
-    public function test($id){
+    public function user(Request $request,$id){
+        $user_id = $request->input('user_id');
 
         $oportunidade = oportunidade::find($id);
-         $usuario = usuario::find(2);
-        
-        // $oportunidade->usuarios()->save($usuario);
-         
-        var_dump($oportunidade->usuarios);
-    //   $oportunidade->usuarios->first()->name;
-        // var_dump($oportunidade->usuarios->first());
+         $usuario = usuario::find($user_id);
+        if($oportunidade){
+            if($usuario){
+                $oportunidade->usuarios()->save($usuario);
+            }else{
+                return response()->json(['error'=> 'Ususario não encontrado'], 404);
+            }
+        }else{
+            return response()->json(['error'=> 'Oportunidade não encontrada'], 404);
+        }
+
+        // var_dump($oportunidade->usuarios);
     }
 }

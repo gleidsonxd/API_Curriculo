@@ -40,6 +40,6 @@ Route::group(['middleware' => 'authbasichttp'], function () {
     Route::post('oportunidades','OportunidadeController@create');
     Route::put('oportunidades/{id}','OportunidadeController@update');
     Route::delete('oportunidades/{id}','OportunidadeController@delete');
-    Route::get('oportunidades/test/{id}','OportunidadeController@test');
+    Route::get('oportunidades/user/{id}','OportunidadeController@user');
 
 });
