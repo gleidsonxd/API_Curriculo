@@ -32,7 +32,7 @@ Route::group(['middleware' => 'authbasichttp'], function () {
     Route::get('curriculos','CurriculoController@list');
     Route::get('curriculos/{id}','CurriculoController@read');
     Route::post('curriculos','CurriculoController@create');
-    Route::put('curriculos/{id}','CurriculoController@update');
+    Route::post('curriculos/{id}','CurriculoController@update');
     Route::delete('curriculos/{id}','CurriculoController@delete');
     #Routes Oportunidades
     Route::get('oportunidades','OportunidadeController@list');

@@ -35,8 +35,8 @@ class CurriculoController extends Controller
         if(!is_null($request->file('archive'))){
             @$ext = @$request->file('archive')->getClientOriginalExtension();
             @$fileName = "curriculouser".@$input['usuario_id'].".".$ext;
-            
-            $file = $request->file('archive')->storeAS('curriculos',$fileName);
+            @$filepath = 'curriculos/user'.@$input['usuario_id'];
+            $file = $request->file('archive')->storeAS($filepath,$fileName);
         }else{
             $fileName="";
         }
@@ -46,19 +46,19 @@ class CurriculoController extends Controller
         $curriculo->cur_job = @$input['cur_job'];
         $curriculo->exp_prof = @$input['exp_prof'];
         $curriculo->skill = @$input['skill'];
-        $curriculo->archive = @$fileName;
+        $curriculo->archive = @$filepath."/".@$fileName;
         $curriculo->usuario_id = @$input['usuario_id'];
         $curriculo->save();
         return response()->json(['success'=> 'Curriculo Cadsatrado com sucesso'], 200);
     }
     public function update(Request $request,$id){
         $curriculo = curriculo::find($id);
-         $input = $request->all();
+        $input = $request->all();
         if(!is_null($request->file('archive'))){
             @$ext = @$request->file('archive')->getClientOriginalExtension();
             @$fileName = "curriculouser".@$input['usuario_id'].".".$ext;
-            
-            $file = $request->file('archive')->storeAS('curriculos',$fileName);
+            @$filepath = 'curriculos/user'.@$input['usuario_id'];
+            $file = $request->file('archive')->storeAS($filepath,$fileName);
         }else{
             $fileName = $curriculo->archive;
         }
@@ -69,7 +69,7 @@ class CurriculoController extends Controller
             $curriculo->cur_job = @$input['cur_job'];
             $curriculo->exp_prof = @$input['exp_prof'];
             $curriculo->skill = @$input['skill'];
-            $curriculo->archive = $fileName;
+            $curriculo->archive = @$filepath."/".@$fileName;
             $curriculo->usuario_id = @$input['usuario_id'];
             $curriculo->save();
             return response()->json($curriculo, 200);
