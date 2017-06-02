@@ -15,7 +15,7 @@ class OportunidadeController extends Controller
     function __construct(){}
 
     public function list(){
-        $oportunidades = oportunidade::all();            
+        $oportunidades = oportunidade::all();
         if(!$oportunidades->isEmpty()){
             return response()->json($oportunidades, 200);
         }else{
@@ -71,21 +71,51 @@ class OportunidadeController extends Controller
         }
     }
     #ID user e ID categoria, qnd user se inscreve esse metodo é chamado
-    public function user(Request $request,$id){
+    public function join(Request $request,$id){
         $user_id = $request->input('user_id');
 
         $oportunidade = oportunidade::find($id);
-         $usuario = usuario::find($user_id);
+        $usuario = usuario::find($user_id);
         if($oportunidade){
             if($usuario){
-                $oportunidade->usuarios()->save($usuario);
+                if($oportunidade->usuarios->contains($usuario)){
+                    return response()->json(['error'=> 'Usuario ja está cadastrado na Oportunidade'], 500);
+                }else{
+                    if($oportunidade->usuarios()->save($usuario)){
+                        return response()->json(['message'=> 'Usuario se inscreveu na Oportunidade'], 200);
+                    }else{
+                        return response()->json(['error'=> 'Erro ao se inscrever na Oportunidade'], 500);
+                    }
+                    
+                }
             }else{
                 return response()->json(['error'=> 'Ususario não encontrado'], 404);
             }
         }else{
             return response()->json(['error'=> 'Oportunidade não encontrada'], 404);
         }
+    }
+    public function leave(Request $request,$id){
+        $user_id = $request->input('user_id');
 
-        // var_dump($oportunidade->usuarios);
+        $oportunidade = oportunidade::find($id);
+         $usuario = usuario::find($user_id);
+        if($oportunidade){
+            if($usuario){
+                if(!$oportunidade->usuarios->contains($usuario)){
+                    return response()->json(['error'=> 'Usuario não está cadastrado na Oportunidade'], 500);
+                }else{
+                    if($oportunidade->usuarios()->detach($user_id)){
+                        return response()->json(['message'=> 'Usuario desistiu da Oportunidade'], 200);
+                    }else{
+                        return response()->json(['error'=> 'Erro ao desistir da Oportunidade'], 500);
+                    }
+                }   
+            }else{
+                return response()->json(['error'=> 'Ususario não encontrado'], 404);
+            }
+        }else{
+            return response()->json(['error'=> 'Oportunidade não encontrada'], 404);
+        }
     }
 }

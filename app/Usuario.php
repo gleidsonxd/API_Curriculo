@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Usuario extends Model
 {
     //
+    // protected $with=['curriculo'];
     public function curriculo(){
         return $this->hasOne('App\Curriculo','usuario_id');
     }
@@ -15,7 +16,8 @@ class Usuario extends Model
         return $this->belongsToMany('App\Oportunidade','usuarios_oportunidades','usuario_id','op_id');
     }
     protected $fillable = [
-        'name', 'email', 'password','cpf','tel'
+        'name', 'email','cpf','tel'
     ];
+    protected $hidden = ['password'];
        
 }
