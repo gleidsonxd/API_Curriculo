@@ -1,1 +1,11 @@
 mysql -h localhost -u root -prootroot
+
+curl\
+-F "usuario_id=2" \
+-F "lattes=lattes" \
+-F "linkedin=linkedin" \
+-F "cur_job=cur_job" \
+-F "exp_prof=exp_prof" \
+-F "skill=skill" \
+-F "archive=/Downloads/teste.png" \
+http://localhost:8000/curriculos

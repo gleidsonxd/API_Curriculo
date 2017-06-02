@@ -32,28 +32,44 @@ class CurriculoController extends Controller
     public function create(Request $request) {
         $curriculo = new Curriculo;
         $input = $request->all();
+        if(!is_null($request->file('archive'))){
+            @$ext = @$request->file('archive')->getClientOriginalExtension();
+            @$fileName = "curriculouser".@$input['usuario_id'].".".$ext;
+            
+            $file = $request->file('archive')->storeAS('curriculos',$fileName);
+        }else{
+            $fileName="";
+        }
     
         $curriculo->lattes = @$input['lattes'];
         $curriculo->linkedin = @$input['linkedin'];
         $curriculo->cur_job = @$input['cur_job'];
         $curriculo->exp_prof = @$input['exp_prof'];
         $curriculo->skill = @$input['skill'];
-        $curriculo->archive = @$input['archive'];
+        $curriculo->archive = @$fileName;
         $curriculo->usuario_id = @$input['usuario_id'];
         $curriculo->save();
         return response()->json(['success'=> 'Curriculo Cadsatrado com sucesso'], 200);
     }
     public function update(Request $request,$id){
         $curriculo = curriculo::find($id);
-        $input = $request->all();
-    
+         $input = $request->all();
+        if(!is_null($request->file('archive'))){
+            @$ext = @$request->file('archive')->getClientOriginalExtension();
+            @$fileName = "curriculouser".@$input['usuario_id'].".".$ext;
+            
+            $file = $request->file('archive')->storeAS('curriculos',$fileName);
+        }else{
+            $fileName = $curriculo->archive;
+        }
+
         if($curriculo){
             $curriculo->lattes = @$input['lattes'];
             $curriculo->linkedin = @$input['linkedin'];
             $curriculo->cur_job = @$input['cur_job'];
             $curriculo->exp_prof = @$input['exp_prof'];
             $curriculo->skill = @$input['skill'];
-            $curriculo->archive = @$input['archive'];
+            $curriculo->archive = $fileName;
             $curriculo->usuario_id = @$input['usuario_id'];
             $curriculo->save();
             return response()->json($curriculo, 200);
