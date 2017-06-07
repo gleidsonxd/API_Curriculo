@@ -21,13 +21,17 @@ Route::group(['middleware' => 'authbasichttp'], function () {
     Route::get('usuarios/{id}','UsuarioController@read');
     Route::post('usuarios','UsuarioController@create');
     Route::put('usuarios/{id}','UsuarioController@update');
+    Route::put('usuariospass/{id}','UsuarioController@updatepass');
     Route::delete('usuarios/{id}','UsuarioController@delete');
+    Route::post('usuarioslogin','UsuarioController@login');
     #Routes Gestor
     Route::get('gestors','GestorController@list');
     Route::get('gestors/{id}','GestorController@read');
     Route::post('gestors','GestorController@create');
     Route::put('gestors/{id}','GestorController@update');
+    Route::put('gestorspass/{id}','UsuarioController@updatepass');
     Route::delete('gestors/{id}','GestorController@delete');
+    Route::post('gestorslogin','GestorController@login');
     #Routes Curriculo
     Route::get('curriculos','CurriculoController@list');
     Route::get('curriculos/{id}','CurriculoController@read');

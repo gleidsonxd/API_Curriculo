@@ -62,7 +62,7 @@ class UsuarioController extends Controller
             $usuario->name = @$input['name'];
             $usuario->tel = @$input['tel'];
             $usuario->cpf = @$input['cpf'];
-            $usuario->password = @$input['password'];
+            #$usuario->password = @$input['password'];
             $usuario->email = @$input['email'];
             $usuario->save();
             return response()->json($usuario, 200);
@@ -70,7 +70,20 @@ class UsuarioController extends Controller
             return response()->json(['error'=> 'Usuario não encontrado'], 404);
         }
     }
-
+    public function updatepass(Request $request,$id){
+        
+        $usuario=usuario::find($id);
+        $input = $request->all();
+       
+        if($usuario){
+            $usuario->password = @$input['password'];
+            $usuario->save();
+            return response()->json($usuario, 200);
+        }else{
+            return response()->json(['error'=> 'Usuario não encontrado'], 404);
+        }
+    }
+  
     public function delete($id){
         $usuario = usuario::find($id);
         if($usuario){
@@ -81,6 +94,24 @@ class UsuarioController extends Controller
             }
         }else{
             return response()->json(['error'=> 'Usuario não encontrado'], 404);   
+        }
+    }
+    public function login(Request $request){
+        $usuarios = usuario::all();
+        $input = $request->all();
+        if(!$usuarios->isEmpty()){
+            foreach($usuarios as $usuario){
+                if(($input['email']===$usuario->email)&&($input['password']===$usuario->password)){
+                    return response()->json([
+                        'logado' => 1,
+                        'usuario_id' => $usuario->id,
+                        'usuario_email' =>$usuario->email,
+                        'type' => 'usuario'
+                    ]);
+                }
+            }
+        }else{
+            return response()->json(['error'=> 'Usuarios não encontrados'], 404);
         }
     }
 }

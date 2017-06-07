@@ -54,8 +54,21 @@ class GestorController extends Controller
        
         if($gestor){
             @$gestor->name = @$input['name'];
-            @$gestor->password = @$input['password'];
+            #@$gestor->password = @$input['password'];
             @$gestor->email = @$input['email'];
+            $gestor->save();
+            return response()->json($gestor, 200);
+        }else{
+            return response()->json(['error'=> 'Gestor não encontrado'], 404);
+        }
+    }
+    public function updatepass(Request $request,$id){
+        
+        $gestor=usuario::find($id);
+        $input = $request->all();
+       
+        if($gestor){
+            $gestor->password = @$input['password'];
             $gestor->save();
             return response()->json($gestor, 200);
         }else{
@@ -72,6 +85,24 @@ class GestorController extends Controller
             }
         }else{
             return response()->json(['error'=> 'Gestor não encontrado'], 404);   
+        }
+    }
+    public function login(Request $request){
+        $gestors = gestor::all();
+        $input = $request->all();
+        if(!$gestors->isEmpty()){
+            foreach($gestors as $gestor){
+                if(($input['email']===$gestor->email)&&($input['password']===$gestor->password)){
+                    return response()->json([
+                        'logado' => 1,
+                        'gestor_id' => $gestor->id,
+                        'gestor_email' => $gestor->email,
+                        'type' => 'gestor'
+                    ]);
+                }
+            }
+        }else{
+            return response()->json(['error'=> 'Gestores não encontrados'], 404);
         }
     }
 }
